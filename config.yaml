@@ -1,6 +1,6 @@
 openai:
   api_key: "${OPENAI_API_KEY}"  # Set via environment variable
-  model: "gpt-4o-mini"
+  model: "gpt-5.6-luna"
 
 telegram:
   bot_token: "${TELEGRAM_BOT_TOKEN}"  # Set via environment variable
@@ -11,9 +11,9 @@ newsapi:
 
 preferences:
   topics:
-    - "cricket"
+    - "football"
     - "ai"
-    - "politics"
+    - "india"
   languages:
     - "en"
   countries:

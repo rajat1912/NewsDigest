@@ -26,7 +26,6 @@ func NewSummarizer(apiKey string, model string) *Summarizer {
 type openAIRequest struct {
 	Model               string      `json:"model"`
 	Messages            []openAIMsg `json:"messages"`
-	MaxTokens           int         `json:"max_tokens,omitempty"`
 	MaxCompletionTokens int         `json:"max_completion_tokens,omitempty"`
 }
 
@@ -113,7 +112,6 @@ Format your response EXACTLY as:
 				Content: prompt,
 			},
 		},
-		MaxTokens:           1000,
 		MaxCompletionTokens: 1000,
 	}
 
@@ -121,14 +119,6 @@ Format your response EXACTLY as:
 	if err != nil {
 		log.Printf("OpenAI request marshal failed: %v; using fallback summarization", err)
 		return fallbackSummarize(titles, descriptions, preferences, numArticles)
-	}
-
-	// For newer models like gpt-5.6-luna, remove max_tokens and only use max_completion_tokens
-	if strings.Contains(s.model, "gpt-5") || strings.Contains(s.model, "luna") {
-		var reqMap map[string]interface{}
-		json.Unmarshal(jsonData, &reqMap)
-		delete(reqMap, "max_tokens")
-		jsonData, _ = json.Marshal(reqMap)
 	}
 
 	req, err := http.NewRequestWithContext(ctx, "POST", "https://api.openai.com/v1/chat/completions", bytes.NewBuffer(jsonData))
